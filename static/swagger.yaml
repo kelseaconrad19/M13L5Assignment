@@ -1,0 +1,435 @@
+swagger: '2.0'
+info:
+  title: 'E-commerce API'
+  description: 'This is an API to manage an E-commerce application.'
+  version: '1.0.0'
+host: '127.0.0.1:5000'
+schemes:
+  - 'http'
+consumes:
+  - 'application/json'
+produces:
+  - 'application/json'
+paths:
+  /accounts/login:
+    post:
+      tags:
+        - Accounts
+      summary: "Login endpoint"
+      description: "Endpoint for user authentication."
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Credentials for login"
+          required: true
+          schema:
+            $ref: "#/definitions/LoginCredentials"
+      responses:
+        200:
+          description: "Login successful"
+          schema:
+            $ref: "#/definitions/LoginResponse"
+  /customers:
+    get:
+      tags:
+        - Customers
+      summary: "Get all Customers"
+      description: "Retrieve a list of all customers"
+      responses:
+        '200':
+          description: 'Successful response'
+          schema:
+            type: 'array'
+            items:
+              $ref: "#/definitions/Customer"
+          examples:
+            application/json:
+              value:
+                email: "jdoe@example.com"
+                name: "John Doe"
+                id: 1
+                phone: "1231231234"
+
+        '404':
+          description: 'Customers not found'
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              value:
+                status: "error"
+                message: "No customers found."
+        '500':
+          description: 'Internal server error'
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              value:
+                status: "error"
+                message: "Internal server error"
+    post:
+      tags:
+        - Customers
+      summary: "Create a new customer"
+      description: "Endpoint to save a new customer to the database."
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Customer to create"
+          required: true
+          schema:
+            $ref: "#/definitions/Customer"
+      responses:
+        '201':
+          description: 'Customer created successfully'
+          schema:
+            $ref: "#/definitions/Customer"
+          examples:
+            application/json:
+              value:
+                email: "jdoe@example.com"
+                name: "John Doe"
+                id: 1
+                phone: "1231231234"
+        '400':
+          description: 'Invalid request data'
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              value:
+                status: "error"
+                message: "Invalid data."
+        '409':
+          description: 'Customer with provided email or phone already exists'
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              value:
+                status: "error"
+                message: "Customer already exists."
+        '500':
+          description: 'Internal server error'
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            application/json:
+              value:
+                status: "error"
+                message: "Server error."
+
+  /employees:
+    get:
+      tags:
+        - Employees
+      summary: 'Get all employees'
+      description: "Retrieve a list of all employees"
+      responses:
+        '200':
+          description: 'Successful response'
+          schema:
+            type: 'array'
+            items:
+              $ref: "#/definitions/Employee"
+          examples:
+            application/json:
+              value:
+                id: 1
+                name: "John Doe"
+                position: "Manager"
+    post:
+      tags:
+        - Employees
+      summary: "Save a new employee"
+      description: "Endpoint for saving a new employee to the database."
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Employee to save"
+          required: true
+          schema:
+            $ref: "#/definitions/Employee"
+      responses:
+        '201':
+          description: 'Employee saved successfully.'
+          schema:
+            $ref: "#/definitions/Employee"
+          examples:
+            application/json:
+              value:
+                message: "Employee created successfully"
+                status: "success"
+  /products:
+    get:
+      tags:
+        - Products
+      summary: 'Get all products'
+      description: "Retrieve a list of all products"
+      responses:
+        '200':
+          description: 'Successful response'
+          schema:
+            type: 'array'
+            items:
+              $ref: "#/definitions/Product"
+
+    post:
+      tags:
+        - Products
+      summary: "Save a new product"
+      description: "Endpoint for saving a new product to the database."
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Product to save"
+          required: true
+          schema:
+            $ref: "#/definitions/Product"
+      responses:
+        '201':
+          description: 'Product saved successfully.'
+          schema:
+            $ref: "#/definitions/Product"
+          examples:
+            application/json:
+              value:
+                message: "Product created successfully"
+                status: "success"
+  /orders:
+    get:
+      tags:
+        - Orders
+      summary: 'Get all orders'
+      description: "Retrieve a list of all orders"
+      responses:
+        '200':
+          description: 'Successful response'
+          schema:
+            type: 'array'
+            items:
+              $ref: "#/definitions/Order"
+          examples:
+            application/json:
+              value:
+                id: 1
+                customer_id: 2
+                products: [2, 3]
+                quantity: 3
+    post:
+      tags:
+        - Orders
+      summary: "Create a new order"
+      description: "Endpoint for saving a new order to the database."
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Order to create"
+          required: true
+          schema:
+            $ref: "#/definitions/Order"
+      responses:
+        '201':
+          description: 'Order saved successfully.'
+          schema:
+            $ref: "#/definitions/Order"
+          examples:
+            application/json:
+              value:
+                message: "Order created successfully"
+                status: "success"
+  /production:
+    get:
+      tags:
+        - Productions
+      summary: 'Get all productions'
+      description: "Retrieve a list of all productions"
+      responses:
+        '200':
+          description: 'Successful response'
+          schema:
+            type: 'array'
+            items:
+              $ref: "#/definitions/Production"
+          examples:
+            application/json:
+              value:
+                id: 1
+                quantity: 250
+                product_id: 1
+                date_produced: "2024-10-04"
+                employees: [1, 2]
+    post:
+      tags:
+        - Productions
+      summary: "Create a new production"
+      description: "Endpoint for saving a new production to the database."
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Production to create"
+          required: true
+          schema:
+            $ref: "#/definitions/Production"
+      responses:
+        '201':
+          description: 'Production saved successfully.'
+          schema:
+            $ref: "#/definitions/Production"
+          examples:
+            application/json:
+              value:
+                message: "Production created successfully"
+                status: "success"
+
+definitions:
+  LoginCredentials:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+        description: "Username"
+      password:
+        type: "string"
+        format: "password"
+        description: "Password"
+    required:
+      - "username"
+      - "password"
+  LoginResponse:
+    type: "object"
+    properties:
+      auth_token:
+        type: "string"
+        description: "Authentication token"
+      message:
+        type: "string"
+        description: "Message indicating success or failure"
+      status:
+        type: "string"
+        description: "Status of the operation"
+    required:
+      - "auth_token"
+      - "message"
+  Customer:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        description: "Customer's email address"
+      name:
+        type: "string"
+        description: "Customer's first and last name"
+      id:
+        type: "integer"
+        format: "int64"
+        description: "Customer's unique ID"
+      phone:
+        type: "string"
+        description: "Customer's phone number"
+    required:
+      - "name"
+      - "email"
+      - "id"
+      - "phone"
+  Employee:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        description: "Employee's unique ID"
+      name:
+        type: "string"
+        description: "Employee's name"
+      position:
+        type: "string"
+        description: "Employee's position"
+    required:
+      - "name"
+      - "id"
+  Product:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        description: "Product's unique ID"
+      name:
+        type: "string"
+        description: "Product name"
+      price:
+        type: "number"
+        description: "Price of the product"
+    required:
+      - "id"
+      - "name"
+      - "price"
+  Order:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        description: "Order's unique ID"
+      customer_id:
+        type: "integer"
+        format: "int64"
+        description: "Customer ID"
+      products:
+        type: "array"
+        items:
+          type: "integer"
+        description: "IDs of the products in the order"
+      quantity:
+        type: "integer"
+        format: "int64"
+        description: "Number of products in the order"
+    required:
+      - "id"
+      - "customer_id"
+      - "products"
+      - "quantity"
+  Production:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        description: "Order's unique ID"
+      quantity:
+        type: "integer"
+        format: "int64"
+        description: "Quantity of products made at one time."
+      product_id:
+        type: "integer"
+        format: "int64"
+        description: "Product ID"
+      date_produced:
+        type: "string"
+        format: "date"
+        description: "Date the production was completed."
+      employees:
+        type: "array"
+        items:
+          type: "integer"
+        description: "Array of Employee IDs involved in the production."
+    required:
+      - "id"
+      - "quantity"
+      - "product_id"
+      - "date_produced"
+      - "employees"
+  Error:
+    type: "object"
+    properties:
+      status:
+        type: "string"
+        description: "Status of the error"
+      message:
+        type: "string"
+        description: "Description of the error"
+    required:
+      - "status"
+      - "message"
